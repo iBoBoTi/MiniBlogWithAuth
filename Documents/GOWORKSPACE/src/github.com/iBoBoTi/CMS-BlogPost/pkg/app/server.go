@@ -5,6 +5,11 @@ import (
 	"log"
 )
 
+type Application struct{
+	errorLog *log.Logger
+	infoLog *log.Logger
+}
+
 type Server struct{
 	router *gin.Engine
 }
@@ -32,3 +37,5 @@ func (s *Server) RunServer() error{
 
 	return nil
 }
+
+

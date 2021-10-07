@@ -15,7 +15,10 @@ func (s *Server) Routes() *gin.Engine{
 	router.Static("/static", "./ui/static")
 
 	// application routes
-	router.GET("/signup",handleSignUp)
+	router.GET("/",index)
 	router.GET("/login",handleLogin)
+	router.GET("/signup",handleSignUp)
+	router.POST("/login-auth",handleLoginAuth)
+	router.POST("/signup-auth",handleSignUpAuth)
 	return router
 }

@@ -7,17 +7,10 @@ import (
 	"os"
 )
 
-//type StorageInterface interface{}
-
 type Storage struct{
 	DB *sql.DB
 }
-//
-//func NewStorage(db *sql.DB) Storage {
-//	return &storage{
-//		db: db,
-//	}
-//}
+
 
 func DataBaseConnection() (*sql.DB, error){
 	// sets up the database connection
