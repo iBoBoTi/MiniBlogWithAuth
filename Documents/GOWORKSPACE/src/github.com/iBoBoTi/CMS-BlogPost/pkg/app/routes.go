@@ -28,6 +28,8 @@ func (s *Server) Routes() *gin.Engine{
 
 		GroupRoutes.GET("/",home)
 		GroupRoutes.GET("/logout",handleLogOut)
+		GroupRoutes.GET("/create",handlePostCreate)
+		GroupRoutes.POST("/add",handlePostCreateForm)
 
 	}
 	return router

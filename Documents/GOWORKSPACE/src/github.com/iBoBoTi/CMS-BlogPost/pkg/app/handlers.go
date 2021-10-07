@@ -87,17 +87,42 @@ func handleLogOut(c *gin.Context){
 
 func handleUsersList(){}
 
-func handleUserProfile(){}
+func handleUserProfile(c *gin.Context){}
 
-func handlePostCreate(){}
+func handlePostCreate(c *gin.Context){
+	// presents the form for creating a post
+	c.HTML(http.StatusOK, "CreateBlogPostForm.html", nil)
+}
 
-func handlePostUpdate(){}
+func handlePostCreateForm(c *gin.Context){
+	// processes the creat blog post form and adds it to the data
+	title := c.PostForm("Title")
+	content := c.PostForm("Content")
+	posttype := c.PostForm("PostType")
 
-func handlePostRetrieve(){}
+	stmt:= "INSERT INTO `blog-cms`.`posts` (`title`, `content`, `post_type`) VALUES (?,?,?);"
+	if title == "" || content == "" {
+		c.String(http.StatusUnauthorized,"Please check your entry dear Blogar")
+	} else {
+		prepare, err := Dbase.DB.Prepare(stmt)
+		errCheck(err)
+		defer prepare.Close()
+		_,err = prepare.Exec(title,content,posttype)
+		if err != nil {
+			log.Print(err.Error())
+		}
+		c.Redirect(http.StatusFound,"/blogar/")
+	}
 
-func handlePostDelete(){}
+}
 
-func handlePostList(){}
+func handlePostUpdate(c *gin.Context){}
+
+func handlePostRetrieve(c *gin.Context){}
+
+func handlePostDelete(c *gin.Context){}
+
+func handlePostList(c *gin.Context){}
 
 
 

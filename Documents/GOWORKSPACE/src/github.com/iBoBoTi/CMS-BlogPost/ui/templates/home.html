@@ -10,8 +10,9 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="nav-wrapper">
         <a href="/blogar" class="navbar-brand">Blogar</a>
+        <p>Hi {{ .Username }}</p>
         <ul id="nav-mobile" class="nav nav-item mr-auto my-2 my-lg-0">
-            <li><a href="/create" class="nav-link">Add Post</a></li>
+            <li><a href="/blogar/create" class="nav-link">Add Post</a></li>
         </ul>
         <a href="/blogar/logout" class="nav-link btn btn-danger">LogOut</a>
     </div>

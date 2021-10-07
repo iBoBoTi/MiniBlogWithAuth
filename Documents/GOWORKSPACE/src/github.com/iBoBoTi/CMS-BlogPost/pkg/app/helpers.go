@@ -62,22 +62,6 @@ func ValidateLoginForm(c *gin.Context) bool {
 		return true
 	}
 
-	//stmt := "SELECT * FROM users"
-	//
-	//rows, err := Dbase.DB.Query(stmt)
-	//errCheck(err)
-	//defer rows.Close()
-	//
-	//for rows.Next(){
-	//	var user api.User
-	//	err:= rows.Scan(&user.Email, &user.Password)
-	//	errCheck(err)
-	//
-	//	passCheck:=CheckPasswordHash(password,user.Password)
-	//	if passCheck == true && email == user.Email{
-	//		return true
-	//	}
-	//}
 	return false
 }
 
