@@ -9,19 +9,24 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="nav-wrapper">
-        <a href="/" class="navbar-brand">Blogar</a>
+        <a href="/blogar" class="navbar-brand">Blogar</a>
+        <ul id="nav-mobile" class="nav nav-item mr-auto my-2 my-lg-0">
+            <li><a href="/create" class="nav-link">Add Post</a></li>
+        </ul>
+        <a href="/blogar/logout" class="nav-link btn btn-danger">LogOut</a>
     </div>
 </nav>
 
 <div class="container">
     <h1>Welcome to <strong>BLOGAR</strong></h1>
-    <a href="/signup" class="btn btn-outline-info">SIGN UP</a>
-    <p>To Become A Blogar</p>
-
+    {{ range . }}
+    <a href="/{{.Id}}">
+        <div class="card">
+            <h3 class="card-title">{{ .Title }}</h3>
+        </div>
+    </a>
     <br>
-
-    <p>Already a Blogar?</p>
-    <a href="/login" class="btn btn-outline-primary">LOGIN</a>
+    {{ end }}
 </div>
 
 

@@ -15,10 +15,20 @@ func (s *Server) Routes() *gin.Engine{
 	router.Static("/static", "./ui/static")
 
 	// application routes
-	router.GET("/",index)
-	router.GET("/login",handleLogin)
-	router.GET("/signup",handleSignUp)
-	router.POST("/login-auth",handleLoginAuth)
-	router.POST("/signup-auth",handleSignUpAuth)
+	router.GET("/",CheckNotLoginMiddleware,index)
+	router.GET("/login",CheckNotLoginMiddleware,handleLogin)
+	router.GET("/signup",CheckNotLoginMiddleware,handleSignUp)
+	router.POST("/login-auth",CheckNotLoginMiddleware,handleLoginAuth)
+	router.POST("/signup-auth",CheckNotLoginMiddleware,handleSignUpAuth)
+
+	GroupRoutes := router.Group("/blogar")
+	{
+
+		GroupRoutes.Use(CheckLoginMiddleware)
+
+		GroupRoutes.GET("/",home)
+		GroupRoutes.GET("/logout",handleLogOut)
+
+	}
 	return router
 }

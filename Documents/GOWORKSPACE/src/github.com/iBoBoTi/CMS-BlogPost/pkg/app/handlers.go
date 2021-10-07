@@ -20,6 +20,10 @@ func index(c *gin.Context){
 	c.HTML(http.StatusOK, "index.html", nil)
 }
 
+func home(c *gin.Context){
+	c.HTML(http.StatusOK, "home.html", nil)
+}
+
 func handleSignUp(c *gin.Context){
 	c.HTML(http.StatusOK, "SignUp.html", nil)
 }
@@ -69,14 +73,16 @@ func handleLoginAuth(c *gin.Context){
 	sessionToken := uuid.NewString()
 	if loginCheck==true{
 		c.SetCookie("session", sessionToken, 3600, "/", "localhost", false, true)
-		c.Redirect(http.StatusFound,"/")
+		c.Redirect(http.StatusFound,"/blogar")
 	}else{
 		c.String(http.StatusUnauthorized,"Details doesn't exist")
 	}
 }
 
-func handleLogOut(){
+func handleLogOut(c *gin.Context){
 	// function will delete our session and redirect to the home page
+	c.SetCookie("session","",-1,"/","localhost",true,true)
+	c.Redirect(http.StatusFound,"/")
 }
 
 func handleUsersList(){}
