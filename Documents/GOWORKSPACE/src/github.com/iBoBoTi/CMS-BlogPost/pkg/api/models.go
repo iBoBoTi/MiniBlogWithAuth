@@ -3,7 +3,7 @@ package api
 import "time"
 
 type User struct {
-	ID        int    `json:"id"`
+	ID        string    `json:"id"`
 	FirstName string `json:"first_name"`
 	LastName  string `json:"last_name"`
 	UserName  string `json:"user_name"`
@@ -14,7 +14,7 @@ type User struct {
 }
 
 type Post struct {
-	ID          int       `json:"id"`
+	ID          string       `json:"id"`
 	Title       string    `json:"title"`
 	Content     string    `json:"content"`
 	PublishedAt time.Time `json:"published_at"`
@@ -23,6 +23,7 @@ type Post struct {
 	PostType	string
 	Comments    []Comment
 	Likes	uint
+	UserName string
 }
 
 type Comment struct {

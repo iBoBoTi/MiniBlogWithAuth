@@ -36,10 +36,8 @@ func ValidateSignUpForm(c *gin.Context) (string, bool) {
 	user := api.User{}
 
 	// check the database for already existing username or email
-	err := Dbase.DB.QueryRow("SELECT email, user_name FROM `blog-cms`.`users` WHERE email=? OR user_name=? ;",email,username).Scan(&user.Email,&user.UserName)
-	if err != nil {
-		return err.Error(), false
-	}
+	err:= Dbase.DB.QueryRow("SELECT email, user_name FROM `blog-cms`.`users` WHERE email=? OR user_name=? ;",email,username).Scan(&user.Email,&user.UserName)
+	errCheck(err)
 	if username == user.UserName{
 		return "UserName already exist please pick another username", false
 	}else if email == user.Email{
@@ -50,19 +48,19 @@ func ValidateSignUpForm(c *gin.Context) (string, bool) {
 }
 
 
-func ValidateLoginForm(c *gin.Context) bool {
+func ValidateLoginForm(c *gin.Context) (bool, string) {
 	email := c.PostForm("Email")
 	password := c.PostForm("password")
 	var user api.User
 
-	err := Dbase.DB.QueryRow("SELECT password FROM `blog-cms`.`users` WHERE email=? ;",email).Scan(&user.Password)
+	err := Dbase.DB.QueryRow("SELECT password,id FROM `blog-cms`.`users` WHERE email=? ;",email).Scan(&user.Password, &user.ID)
 	errCheck(err)
 	passCheck:=CheckPasswordHash(password,user.Password)
 	if passCheck == true{
-		return true
+		return true, user.ID
 	}
 
-	return false
+	return false, ""
 }
 
 func errCheck(err error){
