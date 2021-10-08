@@ -137,7 +137,26 @@ func handlePostCreateForm(c *gin.Context){
 
 }
 
-func handlePostUpdate(c *gin.Context){}
+func handlePostUpdate(c *gin.Context){
+	id := c.Param("id")
+	row := Dbase.DB.QueryRow("SELECT `title`,`content`,`post_type` FROM `blog-cms`.`posts` WHERE id=?;",id)
+	var p api.Post
+	err := row.Scan(&p.Title, &p.Content, &p.PostType)
+	errCheck(err)
+}
+func handlePostUpdateForm(c *gin.Context){
+	id := c.Param("id")
+
+	title := c.PostForm("Title")
+	content := c.PostForm("Content")
+	posttype := c.PostForm("PostType")
+
+	stmt, err:= Dbase.DB.Prepare("UPDATE `blog-cms`.`posts` SET `title` = ?, `content` = ?, `posttype`=?WHERE id = ?;")
+	errCheck(err)
+	defer stmt.Close()
+	_, err = stmt.Exec(title,content,posttype,id)
+	c.Redirect(http.StatusFound,"/blogar/my-post")
+}
 
 func handlePostRetrieve(c *gin.Context){
 	id:=c.Param("id")
@@ -149,6 +168,7 @@ func handlePostRetrieve(c *gin.Context){
 }
 
 func handlePostDelete(c *gin.Context){
+	// takes the url id parameter to delete the post at the id
 	id := c.Param("id")
 	log.Println(id)
 	del, err:= Dbase.DB.Prepare("DELETE FROM `blog-cms`.`posts` WHERE (`id`=?);")
