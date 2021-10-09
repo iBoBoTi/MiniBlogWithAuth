@@ -137,21 +137,24 @@ func handlePostCreateForm(c *gin.Context){
 
 }
 
-func handlePostUpdate(c *gin.Context){
+func handlePostEdit(c *gin.Context){
 	id := c.Param("id")
-	row := Dbase.DB.QueryRow("SELECT `title`,`content`,`post_type` FROM `blog-cms`.`posts` WHERE id=?;",id)
-	var p api.Post
-	err := row.Scan(&p.Title, &p.Content, &p.PostType)
+	row := Dbase.DB.QueryRow("SELECT `title`,`content`,`post_type`,`id` FROM `blog-cms`.`posts` WHERE id=?;",id)
+	var post api.Post
+	err := row.Scan(&post.Title, &post.Content, &post.PostType,&post.ID)
 	errCheck(err)
+
+	c.HTML(http.StatusOK, "EditBlogPostForm.html", post)
 }
-func handlePostUpdateForm(c *gin.Context){
+
+func handlePostEditForm(c *gin.Context){
 	id := c.Param("id")
 
 	title := c.PostForm("Title")
 	content := c.PostForm("Content")
 	posttype := c.PostForm("PostType")
 
-	stmt, err:= Dbase.DB.Prepare("UPDATE `blog-cms`.`posts` SET `title` = ?, `content` = ?, `posttype`=?WHERE id = ?;")
+	stmt, err:= Dbase.DB.Prepare("UPDATE `blog-cms`.`posts` SET `title` = ?, `content` = ?, `post_type`= ? WHERE id = ?;")
 	errCheck(err)
 	defer stmt.Close()
 	_, err = stmt.Exec(title,content,posttype,id)
@@ -162,7 +165,31 @@ func handlePostRetrieve(c *gin.Context){
 	id:=c.Param("id")
 	var post api.Post
 
-	err := Dbase.DB.QueryRow("SELECT id,title,content FROM posts WHERE id=?;",id).Scan(&post.ID,&post.Title,&post.Content)
+
+	stmt := "SELECT id, content, author, published_at FROM comments WHERE post = ?"
+
+	rows, err := Dbase.DB.Query(stmt,id)
+	if err != nil{
+		return
+	}
+	defer rows.Close()
+
+
+
+	for rows.Next(){
+		var c api.Comment
+		err:= rows.Scan(&c.ID,&c.Content, &c.Author,&c.PublishedAt)
+
+		if err != nil{
+			return
+		}
+		post.Comments = append(post.Comments, c)
+
+	}
+
+
+
+	err = Dbase.DB.QueryRow("SELECT id,title,content FROM posts WHERE id=?;",id).Scan(&post.ID,&post.Title,&post.Content)
 	errCheck(err)
 	c.HTML(http.StatusOK, "post_detail.html", post)
 }
@@ -205,6 +232,33 @@ func handleUserPost(c *gin.Context){
 
 }
 
+
+// Comments Handlers
+
+func handleCommentCreateForm(c *gin.Context){
+	post_id := c.Param("id")
+	content := strings.TrimSpace(c.PostForm("Content"))
+	user_id,_ := c.Cookie("session")
+	id := uuid.NewString()
+
+	stmt:= "INSERT INTO `blog-cms`.`comments` (`id`,`author`, `content`, `post`) VALUES (?,?,?,?);"
+	if content == "" {
+		c.String(http.StatusUnauthorized,"Type in a comment before you submit")
+	} else {
+		prepare, err := Dbase.DB.Prepare(stmt)
+		errCheck(err)
+		defer prepare.Close()
+		_,err = prepare.Exec(id,user_id,content,post_id)
+		if err != nil {
+			log.Print(err.Error())
+		}
+
+
+		c.Redirect(http.StatusFound,"/blogar/post/"+post_id+"/")
+	}
+
+
+}
 
 
 

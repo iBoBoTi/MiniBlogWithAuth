@@ -1,6 +1,8 @@
 package api
 
-import "time"
+import (
+	"time"
+)
 
 type User struct {
 	ID        string    `json:"id"`
@@ -27,6 +29,7 @@ type Post struct {
 }
 
 type Comment struct {
+	ID string 	`json:"id"`
 	Content string `json:"content"`
 	Author  *User  `json:"author"`
 	PublishedAt time.Time `json:"published_at"`

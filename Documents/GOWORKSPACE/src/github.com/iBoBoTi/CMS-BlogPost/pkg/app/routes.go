@@ -30,9 +30,16 @@ func (s *Server) Routes() *gin.Engine{
 		GroupRoutes.GET("/logout",handleLogOut)
 		GroupRoutes.GET("/create",handlePostCreate)
 		GroupRoutes.POST("/add",handlePostCreateForm)
+		GroupRoutes.GET("/edit/:id",handlePostEdit)
+		GroupRoutes.POST("/post-edit/:id",handlePostEditForm)
+
+
 		GroupRoutes.GET("/post/:id",handlePostRetrieve)
 		GroupRoutes.GET("/post/delete/:id",handlePostDelete)
 		GroupRoutes.GET("/my-post",handleUserPost)
+		GroupRoutes.POST("/comment",handleCommentCreateForm)
+
+		// Comments Routes
 
 	}
 	return router
