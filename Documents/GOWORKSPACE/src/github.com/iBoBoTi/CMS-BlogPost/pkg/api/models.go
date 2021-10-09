@@ -31,7 +31,7 @@ type Post struct {
 type Comment struct {
 	ID string 	`json:"id"`
 	Content string `json:"content"`
-	Author  *User  `json:"author"`
+	Author  string  `json:"author"`
 	PublishedAt time.Time `json:"published_at"`
 	UpdatedAt   time.Time `json:"updated_at"`
 	Post    *Post

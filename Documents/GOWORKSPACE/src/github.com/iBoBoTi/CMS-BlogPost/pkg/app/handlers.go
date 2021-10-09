@@ -166,28 +166,25 @@ func handlePostRetrieve(c *gin.Context){
 	var post api.Post
 
 
-	stmt := "SELECT id, content, author, published_at FROM comments WHERE post = ?"
+	stmt := "SELECT id, content, author FROM comments WHERE post = ?"
 
 	rows, err := Dbase.DB.Query(stmt,id)
 	if err != nil{
+		_ = c.AbortWithError(500, err)
 		return
 	}
 	defer rows.Close()
 
-
-
 	for rows.Next(){
-		var c api.Comment
-		err:= rows.Scan(&c.ID,&c.Content, &c.Author,&c.PublishedAt)
+		var comment api.Comment
+		err:= rows.Scan(&comment.ID,&comment.Content, &comment.Author)
 
 		if err != nil{
+			_ = c.AbortWithError(500, err)
 			return
 		}
-		post.Comments = append(post.Comments, c)
-
+		post.Comments = append(post.Comments, comment)
 	}
-
-
 
 	err = Dbase.DB.QueryRow("SELECT id,title,content FROM posts WHERE id=?;",id).Scan(&post.ID,&post.Title,&post.Content)
 	errCheck(err)

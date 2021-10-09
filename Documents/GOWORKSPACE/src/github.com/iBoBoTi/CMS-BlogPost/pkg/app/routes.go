@@ -37,10 +37,9 @@ func (s *Server) Routes() *gin.Engine{
 		GroupRoutes.GET("/post/:id",handlePostRetrieve)
 		GroupRoutes.GET("/post/delete/:id",handlePostDelete)
 		GroupRoutes.GET("/my-post",handleUserPost)
-		GroupRoutes.POST("/comment",handleCommentCreateForm)
+		GroupRoutes.POST("/comment/:id",handleCommentCreateForm)
 
 		// Comments Routes
-
 	}
 	return router
 }

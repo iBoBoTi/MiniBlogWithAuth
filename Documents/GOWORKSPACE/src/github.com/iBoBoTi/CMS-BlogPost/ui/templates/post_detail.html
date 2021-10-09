@@ -33,7 +33,7 @@
 </div>
 
 <div class="container contact-form">
-    <form method="POST" action="/blogar/comment">
+    <form method="POST" action="/blogar/comment/{{.ID}}">
         <div class="form-group">
             <textarea name="Content" class="form-control" placeholder="Tell the Blogar what you think..." style="width: 100%; height: 150px;"></textarea>
         </div>
@@ -44,13 +44,13 @@
 </div>
 
 
-{{ range . }}
-{{ .Comment }}
+{{ range .Comments }}
+
 
 <div class="panel panel-default">
     <div class="panel-heading"><p class="card-title">{{ .Content }}</p></div>
     <div class="panel-body">
-        <p>published by: {{ .Author }} - {{ .PublishedAt }} </p>
+        <p>published by: {{ .Author }} </p>
     </div>
 </div>
 
