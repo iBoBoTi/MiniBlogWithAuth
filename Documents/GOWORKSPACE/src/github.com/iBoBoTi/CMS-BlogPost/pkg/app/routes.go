@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (s *Server) Routes() *gin.Engine{
+func (s *Server) Routes() *gin.Engine {
 	// initializes the routes
 	router := s.router
 
@@ -15,29 +15,28 @@ func (s *Server) Routes() *gin.Engine{
 	router.Static("/static", "./ui/static")
 
 	// application routes
-	router.GET("/",CheckNotLoginMiddleware,index)
-	router.GET("/login",CheckNotLoginMiddleware,handleLogin)
-	router.GET("/signup",CheckNotLoginMiddleware,handleSignUp)
-	router.POST("/login-auth",CheckNotLoginMiddleware,handleLoginAuth)
-	router.POST("/signup-auth",CheckNotLoginMiddleware,handleSignUpAuth)
+	router.GET("/", CheckNotLoginMiddleware, index)
+	router.GET("/login", CheckNotLoginMiddleware, handleLogin)
+	router.GET("/signup", CheckNotLoginMiddleware, handleSignUp)
+	router.POST("/login-auth", CheckNotLoginMiddleware, handleLoginAuth)
+	router.POST("/signup-auth", CheckNotLoginMiddleware, handleSignUpAuth)
 
 	GroupRoutes := router.Group("/blogar")
 	{
 
 		GroupRoutes.Use(CheckLoginMiddleware)
 
-		GroupRoutes.GET("/",home)
-		GroupRoutes.GET("/logout",handleLogOut)
-		GroupRoutes.GET("/create",handlePostCreate)
-		GroupRoutes.POST("/add",handlePostCreateForm)
-		GroupRoutes.GET("/edit/:id",handlePostEdit)
-		GroupRoutes.POST("/post-edit/:id",handlePostEditForm)
+		GroupRoutes.GET("/", home)
+		GroupRoutes.GET("/logout", handleLogOut)
+		GroupRoutes.GET("/create", handlePostCreate)
+		GroupRoutes.POST("/add", handlePostCreateForm)
+		GroupRoutes.GET("/edit/:id", handlePostEdit)
+		GroupRoutes.POST("/post-edit/:id", handlePostEditForm)
 
-
-		GroupRoutes.GET("/post/:id",handlePostRetrieve)
-		GroupRoutes.GET("/post/delete/:id",handlePostDelete)
-		GroupRoutes.GET("/my-post",handleUserPost)
-		GroupRoutes.POST("/comment/:id",handleCommentCreateForm)
+		GroupRoutes.GET("/post/:id", handlePostRetrieve)
+		GroupRoutes.GET("/post/delete/:id", handlePostDelete)
+		GroupRoutes.GET("/my-post", handleUserPost)
+		GroupRoutes.POST("/comment/:id", handleCommentCreateForm)
 
 		// Comments Routes
 	}
