@@ -2,25 +2,35 @@ package repository
 
 import (
 	"database/sql"
-	_ "github.com/go-sql-driver/mysql"
+	"fmt"
+	_ "github.com/lib/pq"
 	"log"
 	"os"
 )
 
-type Storage struct{
+type Storage struct {
 	DB *sql.DB
 }
 
+func DataBaseConnection() (*sql.DB, error) {
+	//sets up the database connection
+	DBUser := os.Getenv("DB_USER")
+	DBPass := os.Getenv("DB_PASS")
+	DBHost := os.Getenv("DB_HOST")
+	DBName := os.Getenv("DB_NAME")
+	DBPort := os.Getenv("DB_PORT")
+	psqlInfo := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", DBHost, DBPort, DBUser, DBPass, DBName)
 
-func DataBaseConnection() (*sql.DB, error){
-	// sets up the database connection
-	pswd := os.Getenv("MYSQL_PASSWORD")
-	db, err := sql.Open("mysql","root:"+pswd+"@tcp(localhost:3306)/blog-cms")
-	if err != nil{
+	//dbURL := os.Getenv("DATABASE_URL")
+
+	//DSN := fmt.Sprintf("%v:%v@tcp(%v:%v)/%v", DBUser, DBPass, DBHost, DBPort, DBName)
+
+	db, err := sql.Open("postgres", psqlInfo)
+	if err != nil {
 		panic(err.Error())
 	}
 	err = db.Ping()
-	if err != nil{
+	if err != nil {
 		log.Println(err)
 	}
 	return db, nil
