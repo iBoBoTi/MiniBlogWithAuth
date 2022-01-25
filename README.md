@@ -16,3 +16,6 @@ $ make run
 or
 $ modd
 ```
+
+## Deployment
+* The application is hosted with the domain name on heroku `blogaar.herokuapp.com`
