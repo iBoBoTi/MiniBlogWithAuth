@@ -138,7 +138,7 @@ func (s *Server) handlePostCreateForm(c *gin.Context) {
 func (s *Server) handlePostEdit(c *gin.Context) {
 	id := c.Param("id")
 
-	row := s.DB.DB.QueryRow("SELECT title,content,post_type,id FROM posts WHERE id=$1;", id)
+	row := s.DB.DB.QueryRow("SELECT title, content, post_type, id FROM posts WHERE id=$1;", id)
 	var post api.Post
 	err := row.Scan(&post.Title, &post.Content, &post.PostType, &post.ID)
 	errCheck(err)
